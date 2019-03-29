@@ -1,0 +1,58 @@
+
+Alphabet
+
+      %  ! space
+      %-
+
+      Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
+      Ъ:0 Ь:0
+      А   Е   Ё:О́ И О У Ы Э   Ю:У Я
+      А́ А̂ Е́:Э́ Ё́   И́ О́ У́ Ы́ Э́ Э̂ Ю́:У́ Я́:А́
+      А̀   Ѐ   Ё̀   Ѝ О̀ У̀ Ы̀ Э̀   Ю̀   Я̀
+
+      б в г д ж з й к л м н п р с т ф х ц ч ш щ
+      ъ:0 ь:0
+      а   е   ё:о́ и  о у ы э   ю:у я   ʌ
+      а́ â е́:э́ ё́   и́  о́ у́ ы́ э́ э̂ ю́:у́ я́:а́ '    ! ё́ is included to broaden coverage
+      а̀   ѐ   ё̀   ѝ  о̀ у̀ ы̀ э̀   ю̀   я̀ ;
+
+Sets
+
+! Consonants, excluding { Ж ж Й й Ч ч Ш ш Щ щ Ц ц }
+CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
+              б в г д з к л м н п р с т ф х ;
+
+! Labials for Softness Assimilation
+LAB = Б б В в М м П п Ф ф ;
+
+! Dentals for Softness Assimilation
+DEN = Д д З з Л л Н н Р р С с Т т Ц ц ;
+
+! Velars for Softness Assimilation
+VEL = Г г К к Х х ;
+
+! Vowels that indicate softness
+SoftV = Е Ё И Ю Я
+        Е́ Ё́ И́ Ю́ Я́
+        е ё и ю я
+        е́ ё́ и́ ю́ я́ ;
+
+Definitions
+
+Rules
+
+!! ============================================================================
+"Rule 00: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
+0:' <=> CNoSoftHard: _ [ SoftV: | ь: ] ;
+
+!! ============================================================================
+"Rule 16: Softness Assimilation: Dentals"
+0:' <=>:DEN _ :DEN :' ;
+
+!! ============================================================================
+"Rule 17: Softness Assimilation: Labials, { В в } doesn't force assimilation"
+0:' <=> :LAB _ :LAB :' ;
+
+!! ============================================================================
+"Rule 18: Softness Assimilation: Velar"
+0:' <=> :VEL _ :VEL :' ;

@@ -1,0 +1,192 @@
+
+Alphabet
+
+      %  ! space
+      %-
+
+      Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
+      Ъ:0 Ь:0
+      А   Е   Ё:О́ И О У Ы Э   Ю:У Я
+      А́ А̂ Е́:Э́ Ё́   И́ О́ У́ Ы́ Э́ Э̂ Ю́:У́ Я́:А́
+      А̀   Ѐ   Ё̀   Ѝ О̀ У̀ Ы̀ Э̀   Ю̀   Я̀
+
+      б в г д ж з й к л м н п р с т ф х ц ч ш щ
+      ъ:0 ь:0
+      а   е   ё:о́ и  о у ы э   ю:у я   ʌ
+      а́ â е́:э́ ё́   и́  о́ у́ ы́ э́ э̂ ю́:у́ я́:а́ '    ! ё́ is included to broaden coverage
+      а̀   ѐ   ё̀   ѝ  о̀ у̀ ы̀ э̀   ю̀   я̀ ;
+
+Sets
+
+Letter = А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я
+         А́         Е́ Ё́     И́           О́         У́               Ы́   Э́ Ю́ Я́
+         А̀         Ѐ Ё̀     Ѝ           О̀         У̀               Ы̀   Э̀ Ю̀ Я̀
+         а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я
+         а́         е́ ё́     и́           о́         у́               ы́   э́ ю́ я́
+         а̀         ѐ ё̀     ѝ           о̀         у̀               ы̀   э̀ ю̀ я̀
+         %- %  ;
+
+! Consonants
+C = Б В Г Д Ж З Й К Л М Н П Р С Т Ф Х Ц Ч Ш Щ
+    б в г д ж з й к л м н п р с т ф х ц ч ш щ ;
+
+! Consonants, excluding { Ж ж Й й Ч ч Ш ш Щ щ Ц ц }
+CNoSoftHard = Б В Г Д З К Л М Н П Р С Т Ф Х
+              б в г д з к л м н п р с т ф х ;
+
+! Unvoiced and paired consonants
+UnvoicedPairedC = К П С Т Ф Ш
+                  к п с т ф ш ;
+
+! Voiced and paired consonants
+VoicedPairedC = Б В Г Д Ж З
+                б в г д ж з ;
+
+! Voiced and paired consonants
+VoicedPairedCNoB = Б Г Д Ж З
+                   б г д ж з ;
+
+! Soft consonants
+SoftC = Й Ч Щ
+        й ч щ ;
+
+! Hard consonants
+HardC = Ж Ц Ш
+        ж ц ш ;
+
+! Labials for Softness Assimilation
+LAB = Б б В в М м П п Ф ф ;
+
+! Dentals for Softness Assimilation
+DEN = Д д З з Л л Н н Р р С с Т т Ц ц ;
+
+! Velars for Softness Assimilation
+VEL = Г г К к Х х ;
+
+! Vowels
+V = А Е Ё И О У Ы Э Ю Я
+    А́ Е́ Ё́ И́ О́ У́ Ы́ Э́ Ю́ Я́
+    А̀ Ѐ Ё̀ Ѝ О̀ У̀ Ы̀ Э̀ Ю̀ Я̀
+    а е ё и о у ы э ю я
+    а́ е́ ё́ и́ о́ у́ ы́ э́ ю́ я́
+    а̀ ѐ ё̀ ѝ о̀ у̀ ы̀ э̀ ю̀ я̀ ;
+
+! Stressed vowels
+StressedV = А́ Е́ Ё́ Ё И́ О́ У́ Ы́ Э́ Ю́ Я́
+            а́ е́ ё́ ё и́ о́ у́ ы́ э́ ю́ я́ ;
+
+! Unstressed vowels
+UnstressedV = А Е И О У Ы Э Ю Я
+              а е и о у ы э ю я ;
+
+! Vowels that indicate softness
+SoftV = Е Ё И Ю Я
+        Е́ Ё́ И́ Ю́ Я́
+        е ё и ю я
+        е́ ё́ и́ ю́ я́ ;
+
+Definitions
+
+Rules
+
+!! ============================================================================
+"Rule 00: Soften consonants before 'soft' vowels and ь (excluding { Ж ж Ц ц Ш ш Ч ч Щ щ Й й })"
+0:' <=> CNoSoftHard: _ [ SoftV: | ь: ] ;
+
+!! ============================================================================
+"Rule 01: 0>й (lowercase) between vowels, word-initially, and after hard-/soft-signs"
+0:й <=>  [ V: | ь: | ъ: | .#. ] _ [ ю́: | ю: | ё: | я́: | я: | е́: | е: ] ;
+
+!! ============================================================================
+"Rule 02: 0>Й (uppercase) between vowels, word-initially, and after hard-/soft-signs"
+0:Й <=>  [ V: | Ь: | Ъ: | .#. ] _ [ Ю́: | Ю: | Ё: | Я́: | Я: | Е́: | Е: ] ;
+
+!! ============================================================================
+"Rule 03: 0>й (lowercase) after hard-/soft-signs"
+! TODO: Does this also work after the beginning of a word? иголка
+0:й <=> [ ь: | ъ: ] _ [ и́: | и: ];
+
+!! ============================================================================
+"Rule 04: 0>Й (uppercase) after hard-/soft-signs"
+0:Й <=> [ Ь: | Ъ: ] _ [ И́: | И: ];
+
+!! ============================================================================
+"Rule 05: Yeri rule: after hard consonants и is pronounced as ы"
+Vx:Vy <=> HardC _ ;
+where Vx in ( И́ И и́ и )
+      Vy in ( Ы́ Ы ы́ ы )
+  matched ;
+
+!! ============================================================================
+"Rule 06: Akanje: Unstressed vowel reduction for { о а } in pre-tonic location and word-initially"
+Vx:Vy <=> [: - StressedV:] _ [:C | ь: | :']* StressedV: ;
+          .#. _ ;
+where Vx in ( О о А а )
+      Vy in ( ʌ ʌ ʌ ʌ )
+  matched ;
+
+!! ============================================================================
+"Rule 07: Akanje: Unstressed vowel reduction for { о а } in non-pre-tonic and post-tonic location"
+Vx:Vy <=> [: - .#.] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
+          StressedV: :* _ [: - StressedV:]* .#. ;
+where Vx in ( О о А а )
+      Vy in ( Ъ ъ Ъ ъ )
+  matched ;
+
+!! ============================================================================
+"Rule 08: Tense я́ and е́"
+Vx:Vy <=> [ :CNoSoftHard :' | :SoftC ] _ [ :CNoSoftHard :' | :SoftC ] ;
+where Vx in ( Я́ я́ А́ а́ Е́ е́ )
+      Vy in ( А̂ а̂ А̂ а̂ Э̂ э̂ )
+ matched ;
+
+!! ============================================================================
+"Rule 09: Ikanje: Unstressed vowel reduction for { я е } in pre-tonic location"
+Vx:Vy <=> [: - [ HardC: ]] _ [:C | ь: | :']* StressedV: ;
+where Vx in ( Я я Е е )
+      Vy in ( И и И и )
+ matched ;
+
+!! ============================================================================
+"Rule 10: Ikanje: Unstressed vowel reduction for { я е } in non-pre-tonic location, word-initially and post-tonic"
+Vx:Vy <=> [: - [ HardC: ]] _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
+         StressedV: [: - [ HardC:]]* _ [: - StressedV:]* .#. ;
+where Vx in ( Я я Е е )
+      Vy in ( Ь ь Ь ь )
+matched ;
+
+!! ============================================================================
+"Rule 11: Ykanje: unstressed vowel reduction for { е } after { ж ш ц } in pre-tonic location"
+Vx:Vy <=> .#. [: - StressedV:]* HardC: _ [ C: | ь: | :']* StressedV: ;
+where Vx in ( Е е )
+      Vy in ( Ы ы )
+  matched ;
+
+!! ============================================================================
+"Rule 12: Ykanje: unstressed е after { ж ш ц } in non-pre-tonic location"
+Vx:Vy <=> HardC: _ [ [ C: | ь: | :']* UnstressedV: [ C: | ь: | :']* ]+ StressedV: ;
+          StressedV: :* HardC: _ ;
+where Vx in ( Е е )
+      Vy in ( Ъ ъ )
+  matched ;
+
+!! ============================================================================
+"Rule 13: Voice Assimilation: Final devoicing"
+Cx:Cy <=> _ [ :' | :0 ]* .#. ;
+where Cx in ( Б б В в Г г Д д Ж ж З з )
+      Cy in ( П п Ф ф К к Т т Ш ш С с )
+  matched ;
+
+!! ============================================================================
+"Rule 14: Unvoiced Assimilation: Consonant clusters with unvoiced consonant at end of the cluster"
+Cx:Cy <=>  _ [ :' | :0 ]* :UnvoicedPairedC ;
+where Cx in ( Б б В в Г г Д д Ж ж З з )
+      Cy in ( П п Ф ф К к Т т Ш ш С с )
+  matched ;
+
+!! ============================================================================
+"Rule 15: Voice Assimilation: Consonant clusters with voiced consonant at end of the cluster"
+Cx:Cy <=>  _ [ :' | :0 ]* :VoicedPairedCNoB ;
+where Cx in ( П п Ф ф К к Т т Ш ш С с )
+      Cy in ( Б б В в Г г Д д Ж ж З з )
+  matched ;
