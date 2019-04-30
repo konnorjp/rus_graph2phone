@@ -5,7 +5,7 @@ import hfst
 import csv
 
 def get_fst(src):
-    tmp = Path('../res/g2p.tmp.hfst')
+    tmp = Path('../res/g2p_from_py.hfst')
     print('Compiling twolc rules...', file=sys.stderr)
     hfst.compile_twolc_file(src.name, tmp.name, resolve_left_conflicts=True)
     print('Preparing rule transducers for composition...', file=sys.stderr)
@@ -41,7 +41,7 @@ def test_words():
     for row in datareader:
         text.append(row[0])
         truth.append(row[1])
-    src = Path('../res/g2p.twolc')
+    src = Path('../res/g2pc_ykanje.twolc')
     test(text, truth, src)
 
 def test_softness():
